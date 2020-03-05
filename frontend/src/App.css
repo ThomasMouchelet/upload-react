@@ -3,9 +3,10 @@ body{
     background-image: url("/images/background.jpg");
     font-family: "Roboto";
     background-size: cover;
-    background-position-y: -100px;
+    /* background-position-y: -100px; */
     background-repeat: no-repeat;
 }
+
 .filesList{
     background: rgba(0, 0, 0, .2);
     position: absolute;
@@ -53,6 +54,7 @@ body{
     border-radius: .2em;
     transition: all .2s;
     border: 2px #6a6d70 dashed;
+    padding: 0 20px;
 }
 .formUpload input:focus{
     border: 0;
@@ -123,36 +125,97 @@ label.hide{
     margin-left: 1em;
 }
 .uploadDefault .successUpload{
-    opacity: 0;
+    display: none;
 }
 .uploadSuccess .successUpload{
-    opacity: 1;
+    display: flex;
 }
 .uploadSucess .formGroup,
 .uploadSucess .dropzone,
 .uploadSucess .formButton{
     opacity: 0;
 }
-.uploadSucess .successUpload{
+.stateUpload .success{
+    display: none;
+}
+.uploadSucess .success{
+    display: flex;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     opacity: 1;
-    display: flex;
     justify-content: center;
     align-items: center;
     font-size: 3em;
-    transition: all .2s;
+    transition: all .4s;
 }
-.uploadSucess .successUpload div{
+.uploadSucess .success i{
     background: #2ecc71;
     color: #fff;
     padding: 1em;
     border-radius: 50%;
+}
+.load{
+    display: none;
+}
+.loading .load{
     display: flex;
+}
+.load{
+    position: absolute;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
     justify-content: center;
     align-items: center;
+    background: rgba(255,255,255,.8);
+    border-radius: 10px;
 }
+.rejectStyle{
+    background-color: #e74c3c;
+    color: #fff;
+}
+.rejectStyle .addFile .fa-plus{
+    background-color: #fff;
+    color: #e74c3c;
+}
+.uploadList-appear {
+    opacity: 0.01;
+}
+.uploadList-appear.uploadList-appear-active {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}
+.uploadList-enter {
+    opacity: 0.01;
+  }
+  .uploadList-enter.uploadList-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+  .uploadList-leave {
+    opacity: 1;
+  }
+  .uploadList-leave.uploadList-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+  }
 
+@media screen and (max-width: 1500px){
+    body{
+        background-size:  auto 100vh;
+    }
+}
+@media screen and (max-width: 800px){
+    .filesList{
+        position: relative;
+        right: 10px;
+        left: 10px;
+        top: 10px;
+        max-width: 80%;
+    }
+}

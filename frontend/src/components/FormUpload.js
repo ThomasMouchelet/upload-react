@@ -31,7 +31,8 @@ class FormUpload extends React.Component {
 
     if (this.state.allowToUpload) {
       const data = new FormData();
-      let file = this.state.file[0];
+      this.setState({ uploadState: "load" })
+      var file = this.state.file[0];
 
       data.append('file', file);
       data.append('extend', file.name.substr(file.name.length - 3))
@@ -40,7 +41,7 @@ class FormUpload extends React.Component {
 
       fetch(`${this.props.networkUrl}:8000/upload`, {
         method: 'POST',
-        body: data,
+        body: data
       }).then((response, error) => {
         response.json().then((body) => {
           this.setState({ uploadState: true });
@@ -49,6 +50,7 @@ class FormUpload extends React.Component {
           console.log('caught it!', err);
         });
       });
+
     }
   }
   focusInput = (event) => {
@@ -75,33 +77,41 @@ class FormUpload extends React.Component {
   }
 
   render() {
+    let classListForm = "formUpload uploadDefault"
+
+    if (this.state.uploadState === "load") {
+      classListForm = "formUpload loading"
+    }
+    if (this.state.uploadState === true) {
+      classListForm = "formUpload uploadSucess"
+    }
+
     return (
-      <form className={this.state.uploadState ? "formUpload uploadSucess" : "formUpload uploadDefault"} onChange={this.checkForm} onSubmit={this.handleUpload} ref={(ref) => { this.formUpload = ref; }}>
+      <form className={classListForm} onChange={this.checkForm} onSubmit={this.handleUpload} ref={(ref) => { this.formUpload = ref; }}>
         <Dropzone accept=".rar, .zip, application/x-rar-compressed, application/rar, application/octet-stream, application/zip, application/x-zip-compressed" onDrop={this.onDrop}>
           {({ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, acceptedFiles, rejectedFiles }) => {
-            let classList = "dropzone"
-            let message = "Ajouter un fichier"
 
-            if (rejectedFiles.length > 0) {
-              message = "Problème de format";
-            } else if (acceptedFiles.length > 0) {
-              this.state.file.map(item => message = item.name)
+            let classListDropzone = "dropzone"
+            var message = acceptedFiles.length > 0 ? this.state.file.map(item => message = item.name) : "Ajouter un fichier"
+            var onDropMessage = "Drop files here..."
+
+            if (isDragReject) {
+              classListDropzone = "dropzone rejectStyle"
+              onDropMessage = "Attention uniquement les fichiers au format .zip ou .rar"
+            } else if (isDragAccept) {
+              classListDropzone = "dropzone acceptDrag"
             }
-
-            classList = isDragActive ? "dropzone dropActive" : "dropzone";
-            classList = isDragReject ? "dropzone rejectStyle" : "dropzone";
-            classList = isDragAccept ? "dropzone acceptDrag" : "dropzone";
 
             return (
               <div
                 {...getRootProps()}
-                className={classList}
+                className={classListDropzone}
               >
                 <input {...getInputProps()} />
                 {
                   isDragActive ?
                     <div className="onDrop">
-                      <p>Drop files here...</p>
+                      <p>{onDropMessage}</p>
                     </div>
                     :
                     <div className="addFile">
@@ -127,8 +137,11 @@ class FormUpload extends React.Component {
             <button disabled>Upload</button>
           }
         </div>
-        <div className="successUpload">
-          <div>
+        <div className="stateUpload">
+          <div className="load">
+            <img src="/images/load.gif" />
+          </div>
+          <div className="success">
             <i className="fas fa-check"></i>
           </div>
         </div>

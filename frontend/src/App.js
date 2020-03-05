@@ -3,6 +3,7 @@ import './App.css';
 import FormUpload from './components/FormUpload';
 import socketIOClient from 'socket.io-client';
 import config from './constants';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class App extends Component {
 
@@ -39,7 +40,15 @@ class App extends Component {
         <FormUpload networkUrl={this.state.networkUrl} />
         <div className="filesList">
           <h2>Upload files successfully ( {files.length} )</h2>
-          {files}
+          <ReactCSSTransitionGroup
+            transitionName="uploadList"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={300}
+            transitionEnter={true}
+            transitionLeave={true}
+          >
+            {files}
+          </ReactCSSTransitionGroup>
         </div>
       </div>
     );
